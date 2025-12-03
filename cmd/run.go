@@ -2,6 +2,9 @@ package cmd
 
 import (
     "fmt"
+	"log"
+	"os"
+	"os/exec"
     "github.com/spf13/cobra"
     "github.com/jdraines/mapcli-go/internal/mapcli"
 )
@@ -16,7 +19,9 @@ var runCmd = &cobra.Command{
 		m, err := mapcli.ReadMapping(commandName)
 		if err != nil { panic(err) }
     	// var m = mapcli.ReadMap("/home/john/src/okprograms/mapcli-go/examples/example2.yaml")
-		mapArgs(args, m)
+		// mapArgs(args, m)
+		newArgs := mapcli.MapArgs(m, args)
+		execute(newArgs)
     },
 }
 
@@ -35,4 +40,15 @@ func mapArgs(args []string, mapping map[string]string) {
         fmt.Printf("%s ", a)
     }
     fmt.Print("\n")
+}
+
+
+func execute(args []string) {
+	cmd := exec.Command(args[0], args[1:]...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	if err := cmd.Run(); err != nil {
+		log.Fatal(err)
+	}
 }
