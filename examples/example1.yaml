@@ -1,0 +1,6 @@
+foo:
+  bar: baz
+  biff: boff
+fizz:
+  - buzz
+  - wuzz
