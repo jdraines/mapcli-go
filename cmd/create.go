@@ -6,7 +6,7 @@ import (
 )
 
 
-var makeCopy bool
+var makeCopy bool = false
 
 var createCmd = &cobra.Command{
 		Use: "create <command> <mappingPath>",
@@ -15,7 +15,8 @@ var createCmd = &cobra.Command{
 		Run: func(cmd *cobra.Command, args []string) {
         	command := args[0]
 			mappingPath := args[1]
-		    mapcli.CreateMappedCli(mappingPath, command, makeCopy)
+			err := mapcli.CreateMappedCli(mappingPath, command, makeCopy)
+			cobra.CheckErr(err)
 		},
 	}
 

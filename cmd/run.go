@@ -14,12 +14,11 @@ var runCmd = &cobra.Command{
     Use: "run <command> [additional args]",
     Short: "Run a mapped cli",
 	Args: cobra.MinimumNArgs(1),
+	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		commandName := args[0]
 		m, err := mapcli.ReadMapping(commandName)
-		if err != nil { panic(err) }
-    	// var m = mapcli.ReadMap("/home/john/src/okprograms/mapcli-go/examples/example2.yaml")
-		// mapArgs(args, m)
+		if err != nil { cobra.CheckErr(err) }
 		newArgs := mapcli.MapArgs(m, args)
 		execute(newArgs)
     },
@@ -28,6 +27,8 @@ var runCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(runCmd)
+	runCmd.PersistentFlags().BoolP("help", "h", false, "Print usage")
+	runCmd.PersistentFlags().Lookup("help").Hidden = true
 }
 
 

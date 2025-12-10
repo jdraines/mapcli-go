@@ -11,6 +11,9 @@ var rootCmd = &cobra.Command{
     Run: func(cmd *cobra.Command, args []string) {},
 }
 
+func init() {
+	rootCmd.SetHelpCommand(&cobra.Command{Hidden: true})
+}
 
 func Execute() {
     cobra.CheckErr(rootCmd.Execute())

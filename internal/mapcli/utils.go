@@ -7,6 +7,7 @@ import (
     "gopkg.in/yaml.v3"
 )
 
+
 func isErr(e error) bool {
 	if e != nil { return true }
 	return false
@@ -21,10 +22,11 @@ var MapCliMappings = filepath.Join(MapCliDir, "mappings")
 
 type MappingMissingError struct {
 	CommandName string
+	ErrorMsg string
 }
 
 func (e *MappingMissingError) Error() string {
-	return fmt.Sprintf("No mapping found for command %s", e.CommandName)
+	return fmt.Sprintf("No mapping found for command %s; Error: %s", e.CommandName, e.ErrorMsg)
 }
 
 func MakeMapcliDirs() error {
@@ -66,7 +68,7 @@ func ReadMapping(commandName string) (map[string]string, error) {
 
 	_, err := os.Stat(path)
 	if os.IsNotExist(err) {
-		return nil, &MappingMissingError{CommandName: commandName}
+		return nil, &MappingMissingError{CommandName: commandName, ErrorMsg: err.Error()}
 	} else if err != nil {
 		return nil, err
 	}
